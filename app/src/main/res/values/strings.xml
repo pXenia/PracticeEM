@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">PracticeEM</string>
     <string name="find_int_in_list_of_any">Найти Int в списке типа Any</string>
+    <string name="sort">Сортировать</string>
 </resources>

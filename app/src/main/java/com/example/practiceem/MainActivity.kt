@@ -11,6 +11,7 @@ import com.example.practiceem.practice1.task3.Apple
 import com.example.practiceem.practice1.task3.MyApp
 import com.example.practiceem.practice1.task3.User
 import com.example.practiceem.practice1.task3.findInt
+import com.example.practiceem.practice1.task4.shakerSort
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,5 +40,11 @@ class MainActivity : AppCompatActivity() {
                 ).findInt()
                 Log.d("FindInt", "Объекты типа Int: ${intList.joinToString(" ")}")
             }
+
+        // обработчик нажатия на кнопку "Сортировать"
+        findViewById<Button>(R.id.bt_sort).setOnClickListener {
+            val list = shakerSort(listOf(5, null, 3, 1, 4, 2, null))
+            Log.d("ShakerSort", "Результат сортировки: ${list?.joinToString(" ")}")
+        }
     }
 }
