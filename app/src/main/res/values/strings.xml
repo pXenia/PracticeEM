@@ -2,4 +2,6 @@
     <string name="app_name">PracticeEM</string>
     <string name="find_int_in_list_of_any">Найти Int в списке типа Any</string>
     <string name="sort">Сортировать</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
