@@ -1,0 +1,44 @@
+Задание 1
+
+Observable.interval(10, TimeUnit.MILLISECONDS, Schedulers.newThread())
+    .subscribeOn(Schedulers.io()) // игнорируется, т.к. в interval уже указан Schedulers.newThread()
+    .map {
+        Log.d("HAHAHA", "mapThread = ${Thread.currentThread().name}") // выполняется в том же потоке, где и interval
+        it
+    }
+    .doOnSubscribe {
+        Log.d("HAHAHA", "onSubscribeThread = ${Thread.currentThread().name}") // выполняется на RxComputationThreadPool
+    }
+    .subscribeOn(Schedulers.computation())
+    .observeOn(Schedulers.single())
+    .flatMap {
+        Log.d("HAHAHA", "flatMapThread = ${Thread.currentThread().name}") // выполняется на RxSingleScheduler
+        Observable.just(it)
+            .subscribeOn(Schedulers.io())
+    }
+    .subscribe {
+    // выполняется на RxCachedThreadScheduler, из за переноса Observable.just(it).subscribeOn(Schedulers.io())
+        Log.d("HAHAHA", "subscribeThread = ${Thread.currentThread().name}")
+    }
+
+Вывод:
+каждые 10 миллисекунд
+1. onSubscribeThread = RxComputationThreadPool-1 //  только при подписке (выводится один раз)
+2. mapThread = RxNewThreadScheduler-1
+3. flatMapThread = RxSingleScheduler-1
+4. subscribeThread = RxCachedThreadScheduler-1
+... - повторяются  2-4
+
+Задание 2
+
+В лог ничего не выводится PublishSubject — это горячий источник и не хранит предыдущие элементы
+
+Возможные варианты для вывода всех значений
+1) val subject = ReplaySubject.create<String>()
+2) Подписаться до onNext:
+val subject = PublishSubject.create<String>()
+subject.subscribe { Log.d("TAG", it) }
+subject.onNext("1")
+subject.onNext("2")
+subject.onNext("3")
+
